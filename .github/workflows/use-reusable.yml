@@ -16,7 +16,7 @@ jobs:
           path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -73,6 +73,12 @@ jobs:
       artifact-name: dist-files      
     # secrets:
       # some-secret: ${{ secrets.some-secret}}  
+  print-deploy-result:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print deploy output
+        run: echo "${{needs.deploy.output.result}}"
   report:
     needs: [lint, deploy]
     if: failure()
